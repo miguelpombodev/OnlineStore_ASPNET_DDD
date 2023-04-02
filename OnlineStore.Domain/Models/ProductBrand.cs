@@ -7,6 +7,6 @@ namespace OnlineStore.Domain.Models
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
 
-        public virtual IList<Product> Products { get; set; }
+        public IList<Product> Products;
     }
 }

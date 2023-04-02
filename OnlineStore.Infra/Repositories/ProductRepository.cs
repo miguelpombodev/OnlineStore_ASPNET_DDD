@@ -16,7 +16,7 @@ namespace OnlineStore.Infra.Repositories
 
         public async Task<Product> GetById(Guid id)
         {
-            var product = await _context.Set<Product>().Include(p => p.Brand).Include(p => p.Type).FirstOrDefaultAsync(x => x.Id == id);
+            var product = await _context.Set<Product>().Include(p => p.Brand).Include(p => p.Type).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
             return product;
         }

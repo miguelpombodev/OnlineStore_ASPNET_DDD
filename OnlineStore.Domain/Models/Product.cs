@@ -10,7 +10,7 @@ namespace OnlineStore.Domain.Models
         public int StockAmount { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public ProductBrand Brand { get; set; }
-        public ProductType Type { get; set; }
+        public virtual ProductBrand Brand { get; set; }
+        public virtual ProductType Type { get; set; }
     }
 }
