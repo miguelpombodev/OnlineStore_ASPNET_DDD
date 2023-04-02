@@ -1,17 +1,16 @@
-using System;
-
 namespace OnlineStore.Domain.Models
 {
-    public class Product
+    public class Product : BaseEntity
     {
-        public Guid id;
-        public int type_id;
-        public int brand_id;
-        public string sku;
-        public string name;
-        public decimal value;
-        public int stock_amount;
-        public DateTime created_at;
-        public DateTime updated_at;
+        public int TypeId { get; set; }
+        public int BrandId { get; set; }
+        public string Sku { get; set; }
+        public string Name { get; set; }
+        public decimal Value { get; set; }
+        public int StockAmount { get; set; }
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
+        public ProductBrand Brand { get; set; }
+        public ProductType Type { get; set; }
     }
 }

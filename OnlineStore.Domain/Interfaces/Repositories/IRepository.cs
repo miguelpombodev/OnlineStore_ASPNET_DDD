@@ -1,7 +1,7 @@
 namespace OnlineStore.Domain.Interfaces.Repositories
 {
-    public interface IRepository<TEntity> where TEntity : class
+    public interface IBaseRepository<TEntity> where TEntity : class
     {
-        TEntity GetById(Guid id);
+        Task<TEntity> GetById(Guid id);
     }
 }

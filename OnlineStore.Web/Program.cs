@@ -1,13 +1,16 @@
+using System.Text.Json.Serialization;
+using OnlineStore.Domain.Interfaces.Repositories;
+using OnlineStore.Domain.Interfaces.Services;
+using OnlineStore.Domain.Services;
 using OnlineStore.Infra.Context;
+using OnlineStore.Infra.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
-ConfigureServices(builder);
 
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddControllers().AddJsonOptions(x => x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
+ConfigureServices(builder);
 
 var app = builder.Build();
 
@@ -17,6 +20,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 
 app.UseHttpsRedirection();
 
@@ -30,4 +34,12 @@ app.Run();
 void ConfigureServices(WebApplicationBuilder builder)
 {
     builder.Services.AddDbContext<DataContext>();
+    // builder.Services.AddScoped<IBaseRepository<Product>, BaseRepository<Product>>();
+    // builder.Services.AddScoped<IBaseService<Product>, BaseService<Product>>();
+    builder.Services.AddScoped<IProductRepository, ProductRepository>();
+    builder.Services.AddScoped<IProductService, ProductService>();
+
+    // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 }
