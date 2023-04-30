@@ -8,7 +8,7 @@ namespace OnlineStore.Infra.Context
     {
         public DbSet<Product> Products { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer("Server=localhost,1433;Database=OnlineStore;User ID=sa;Password=1q2w3e4r@#$;TrustServerCertificate=true");
+        => options.UseSqlServer("Server=localhost,1433;Database=OnlineStore;User ID=sa;Password=123456QWERT@#$;TrustServerCertificate=true");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
