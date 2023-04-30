@@ -34,10 +34,11 @@ app.Run();
 void ConfigureServices(WebApplicationBuilder builder)
 {
     builder.Services.AddDbContext<DataContext>();
-    // builder.Services.AddScoped<IBaseRepository<Product>, BaseRepository<Product>>();
-    // builder.Services.AddScoped<IBaseService<Product>, BaseService<Product>>();
+    // builder.Services.AddScoped<IBaseRepository<T>, BaseRepository<T>>();
     builder.Services.AddScoped<IProductRepository, ProductRepository>();
     builder.Services.AddScoped<IProductService, ProductService>();
+    builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+    builder.Services.AddScoped<ICustomerService, CustomerService>();
 
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
