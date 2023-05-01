@@ -1,7 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Domain.Interfaces.Services;
-using OnlineStore.Domain.Models;
-using OnlineStore.Domain.Services;
 
 namespace OnlineStore.Application.Controllers
 {

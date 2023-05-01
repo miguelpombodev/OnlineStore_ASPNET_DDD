@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Domain.Interfaces.Services;
-using OnlineStore.Domain.Services;
+using OnlineStore.Services.Services;
 using OnlineStore.Infra.Context;
 using OnlineStore.Infra.Repositories;
 

@@ -2,7 +2,7 @@ using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Domain.Interfaces.Services;
 using OnlineStore.Domain.Models;
 
-namespace OnlineStore.Domain.Services
+namespace OnlineStore.Services.Services
 {
     public class BaseService<TEntity> : IBaseService<TEntity> where TEntity : BaseEntity
     {
