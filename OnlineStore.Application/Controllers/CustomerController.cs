@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using OnlineStore.Domain.DTO;
 using OnlineStore.Domain.Interfaces.Services;
 
 namespace OnlineStore.Application.Controllers
@@ -18,6 +19,12 @@ namespace OnlineStore.Application.Controllers
         public async Task<IActionResult> GetById(Guid id)
         {
             return Ok(await _service.GetById(id));
+        }
+
+        [HttpPost("create")]
+        public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerDTO customer)
+        {
+            return Ok(await _service.SaveCustomer(customer));
         }
     }
 }
