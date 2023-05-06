@@ -11,23 +11,17 @@ namespace OnlineStore.Services.Services
 {
     public class TokenService
     {
-        public string GenerateToken(CustomerLoginDTO customer, Customer registered_customer)
+        public string GenerateToken(Customer customer)
         {
             try
             {
-                var validatedUserPassword = BCrypt.Net.BCrypt.Verify(customer.Password, registered_customer.Password);
-
-                if (validatedUserPassword == false)
-                {
-                    throw new Exception("Password incorrect");
-                }
 
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var key = Encoding.ASCII.GetBytes(SecurityConfiguration.JWTKey);
                 var tokenDescriptor = new SecurityTokenDescriptor
                 {
                     Subject = new ClaimsIdentity(
-                        new Claim[] { new Claim("user_email", registered_customer.Email) }
+                        new Claim[] { new Claim("user_email", customer.Email) }
                     ),
                     Expires = DateTime.UtcNow.AddHours(8),
                     SigningCredentials = new SigningCredentials(

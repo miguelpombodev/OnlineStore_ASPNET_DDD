@@ -9,9 +9,9 @@ namespace OnlineStore.Application.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private ICustomerService _service;
+        private IAccountService _service;
 
-        public AccountController(ICustomerService service)
+        public AccountController(IAccountService service)
         {
             _service = service;
         }
@@ -21,8 +21,8 @@ namespace OnlineStore.Application.Controllers
             [FromBody] CustomerLoginDTO customer,
             [FromServices] TokenService _tokenService)
         {
-            var registeredCustomer = await _service.GetByEmail(customer.Email);
-            var generatedToken = _tokenService.GenerateToken(customer, registeredCustomer);
+            var registeredCustomer = await _service.Login(customer);
+            var generatedToken = _tokenService.GenerateToken(registeredCustomer);
 
             return Ok(new
             {

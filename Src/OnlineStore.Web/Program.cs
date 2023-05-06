@@ -39,6 +39,7 @@ void ConfigureServices(WebApplicationBuilder builder)
     builder.Services.AddScoped<IProductService, ProductService>();
     builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
     builder.Services.AddScoped<ICustomerService, CustomerService>();
+    builder.Services.AddScoped<IAccountService, AccountService>();
 
     builder.Services.AddTransient<TokenService>();
 
