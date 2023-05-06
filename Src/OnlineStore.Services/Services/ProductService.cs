@@ -18,5 +18,17 @@ namespace OnlineStore.Services.Services
             var product = await _repository.GetById(id);
             return product;
         }
+
+        public async Task<List<Product>> GetAllProducts(
+            int? type_id,
+            int? brand_id,
+            decimal? priceStarts,
+            decimal? priceEnds,
+            string? orderBy
+        )
+        {
+            var productList = await _repository.GetAllProducts(type_id, brand_id, priceStarts, priceEnds, orderBy);
+            return productList;
+        }
     }
 }
