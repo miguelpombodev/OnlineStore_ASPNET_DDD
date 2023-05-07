@@ -24,7 +24,20 @@ namespace OnlineStore.Application.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateCustomer([FromBody] CreateCustomerDTO customer)
         {
-            return Ok(await _service.SaveCustomer(customer));
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    return BadRequest(ModelState.Values);
+                }
+
+                return Ok(await _service.SaveCustomer(customer));
+
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
         }
     }
 }

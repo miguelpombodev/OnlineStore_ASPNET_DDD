@@ -1,6 +1,8 @@
+using Microsoft.EntityFrameworkCore;
 using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Domain.Interfaces.Services;
 using OnlineStore.Domain.Models;
+using OnlineStore.Services.Errors;
 
 namespace OnlineStore.Services.Services
 {
@@ -15,8 +17,25 @@ namespace OnlineStore.Services.Services
 
         public async Task<Product> GetById(Guid id)
         {
-            var product = await _repository.GetById(id);
-            return product;
+            try
+            {
+                var product = await _repository.GetById(id);
+
+                if (product == null)
+                {
+                    throw new ServiceError("Product not found", 404);
+                }
+
+                return product;
+            }
+            catch (ServiceError e)
+            {
+                throw e;
+            }
+            catch (DbUpdateException e)
+            {
+                throw new ServiceError("Internal Server Error", 500, e.ToString());
+            }
         }
 
         public async Task<List<Product>> GetAllProducts(
