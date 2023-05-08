@@ -8,6 +8,7 @@ using System.Text;
 using OnlineStore.Infra.Configuration;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using System.Net;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -43,8 +44,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseAuthentication();
-app.UseAuthorization();
+app.UseRouting();
+
+ConfigureAuthentication(app);
 
 app.MapControllers();
 
@@ -66,4 +68,20 @@ void ConfigureServices(WebApplicationBuilder builder)
     // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
+}
+
+void ConfigureAuthentication(WebApplication app)
+{
+    app.Use(async (context, next) =>
+{
+    await next();
+
+    if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
+    {
+        await context.Response.WriteAsync("Token Validation Has Failed. Request Access Denied");
+    }
+});
+
+    app.UseAuthentication();
+    app.UseAuthorization();
 }
