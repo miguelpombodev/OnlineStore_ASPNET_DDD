@@ -1,0 +1,113 @@
+using System.Text.Json.Serialization;
+using OnlineStore.Domain.Interfaces.Repositories;
+using OnlineStore.Domain.Interfaces.Services;
+using OnlineStore.Services.Services;
+using OnlineStore.Infra.Context;
+using OnlineStore.Infra.Repositories;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Net;
+using Serilog;
+using OnlineStore.Infra.Configuration;
+using System.Text;
+using Serilog.Events;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Hosting;
+
+public class Startup
+{
+    public Startup(IConfiguration configuration)
+    {
+        Configuration = configuration;
+    }
+
+    public IConfiguration Configuration { get; }
+
+
+
+    public void Configure(WebApplication app, IWebHostEnvironment env)
+    {
+
+        // Configure the HTTP request pipeline.
+        if (app.Environment.IsDevelopment())
+        {
+            app.UseSwagger();
+            app.UseSwaggerUI();
+        }
+
+
+        app.UseHttpsRedirection();
+
+        app.UseRouting();
+
+        ConfigureAuthentication(app);
+
+        app.MapControllers();
+
+        app.Run();
+    }
+
+    public void ConfigureSerilog(ConfigureHostBuilder host)
+    {
+        host.UseSerilog((ctx, lc) =>
+                {
+                    lc.WriteTo.Console(LogEventLevel.Debug);
+                });
+    }
+
+    public void ConfigureServices(IServiceCollection services)
+    {
+        services.AddDbContext<DataContext>();
+        // services.AddScoped<IBaseRepository<T>, BaseRepository<T>>();
+        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductService, ProductService>();
+        services.AddScoped<ICustomerRepository, CustomerRepository>();
+        services.AddScoped<ICustomerService, CustomerService>();
+        services.AddScoped<IAccountService, AccountService>();
+
+        services.AddTransient<TokenService>();
+
+        // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+        services.AddEndpointsApiExplorer();
+        services.AddSwaggerGen();
+    }
+
+    public void ConfigureAuthentication(WebApplication app)
+    {
+        app.Use(async (context, next) =>
+    {
+        await next();
+
+        if (context.Response.StatusCode == (int)HttpStatusCode.Unauthorized)
+        {
+            await context.Response.WriteAsync("Token Validation Has Failed. Request Access Denied");
+        }
+    });
+
+        app.UseAuthentication();
+        app.UseAuthorization();
+    }
+
+    public void ConfigureJWTToken(IServiceCollection services)
+    {
+        var key = Encoding.ASCII.GetBytes(SecurityConfiguration.JWTKey);
+        services.AddAuthentication(config =>
+        {
+            config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            config.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        }).AddJwtBearer(token =>
+        {
+            token.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(key),
+                ValidateIssuer = false,
+                ValidateAudience = false
+            };
+        });
+    }
+}
