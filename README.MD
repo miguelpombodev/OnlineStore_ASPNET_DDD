@@ -32,7 +32,7 @@ And then, you can start it
 
 To run the database script, check it out in this link below:
 
-[Database Script 😄]("https://github.com/miguelpombodev/Database-scripts/blob/main/Online_Store_Init_Script.sql")
+[Database Script 😄](https://github.com/miguelpombodev/Database-scripts/blob/main/Online_Store_Init_Script.sql)
 
 ### Cloning and starting the project
 Clone the project with SSH
