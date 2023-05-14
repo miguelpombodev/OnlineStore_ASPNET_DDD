@@ -9,7 +9,8 @@ namespace OnlineStore.Infra.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Customers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer("Server=localhost,1433;Database=OnlineStore;User ID=sa;Password=123456QWERT@#$;TrustServerCertificate=true");
+        => options.UseSqlServer(
+            $"Server={Environment.GetEnvironmentVariable("DB_SERVER")},1433;Database={Environment.GetEnvironmentVariable("DB_SCHEMA")};User ID={Environment.GetEnvironmentVariable("DB_USER")};Password={Environment.GetEnvironmentVariable("DB_PASSWORD")};TrustServerCertificate={Environment.GetEnvironmentVariable("TRUST_SERVER_CERTIFICATE")}");
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

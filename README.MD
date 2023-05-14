@@ -51,6 +51,16 @@ Go to the directory
   cd OnlineStore_ASPNET_DDD
 ```
 
+Create your .ENV file with the following parameters
+
+```bash
+    DB_SERVER=localhost
+    DB_SCHEMA=OnlineStore
+    DB_USER=sa
+    DB_PASSWORD="123456QWERT@#$"
+    TRUST_SERVER_CERTIFICATE=true
+```
+
 Build the project
 
 ```bash

@@ -14,5 +14,10 @@ startup.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
+startup.ConfigureAuthentication(app);
+
+var workingPath = Environment.CurrentDirectory;
+var projectDirectory = Directory.GetParent(workingPath).Parent.FullName;
+startup.ConfigureDotEnv(Path.Combine(projectDirectory, ".env"));
 startup.Configure(app, builder.Environment);
 
