@@ -1,6 +1,8 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Domain.DTO;
 using OnlineStore.Domain.Interfaces.Services;
+using OnlineStore.Services.Services;
 
 namespace OnlineStore.Application.Controllers
 {
@@ -15,10 +17,23 @@ namespace OnlineStore.Application.Controllers
             _service = service;
         }
 
-        [HttpGet("{id:Guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        [HttpGet("profile")]
+        [Authorize]
+        public async Task<IActionResult> GetById(
+            [FromServices] TokenService tokenService
+        )
         {
-            return Ok(await _service.GetById(id));
+            try
+            {
+                var email = tokenService.DecodeToken(Request.Headers.Authorization);
+                return Ok(await _service.GetByEmail(email));
+
+            }
+            catch (System.Exception)
+            {
+
+                throw;
+            }
         }
 
         [HttpPost("create")]

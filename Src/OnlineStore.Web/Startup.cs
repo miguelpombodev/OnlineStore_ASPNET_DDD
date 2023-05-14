@@ -1,4 +1,3 @@
-using System.Text.Json.Serialization;
 using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Domain.Interfaces.Services;
 using OnlineStore.Services.Services;
@@ -11,13 +10,7 @@ using Serilog;
 using OnlineStore.Infra.Configuration;
 using System.Text;
 using Serilog.Events;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
-
+using Microsoft.OpenApi.Models;
 public class Startup
 {
     public Startup(IConfiguration configuration)
@@ -73,7 +66,16 @@ public class Startup
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
-        services.AddSwaggerGen();
+        services.AddSwaggerGen(config =>
+        {
+            config.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+            {
+                Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
+                Name = "Authorization",
+                In = ParameterLocation.Header,
+                Type = SecuritySchemeType.ApiKey
+            });
+        });
     }
 
     public void ConfigureAuthentication(WebApplication app)
