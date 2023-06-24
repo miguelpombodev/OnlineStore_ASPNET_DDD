@@ -14,7 +14,7 @@ startup.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
-startup.ConfigureAuthentication(app);
+// startup.ConfigureAuthentication(app);
 
 var workingPath = Environment.CurrentDirectory;
 var projectDirectory = Directory.GetParent(workingPath).Parent.FullName;

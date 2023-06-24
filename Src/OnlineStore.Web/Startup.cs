@@ -35,6 +35,7 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
+        ConfigureAuthentication(app);
 
         app.MapControllers();
 
