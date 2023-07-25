@@ -22,7 +22,7 @@ public class Startup
 
 
 
-    public void Configure(WebApplication app, IWebHostEnvironment env)
+    public void Configure(WebApplication app, IWebHostEnvironment env, string corsOrigins)
     {
 
         // Configure the HTTP request pipeline.
@@ -35,7 +35,7 @@ public class Startup
         app.UseHttpsRedirection();
 
         app.UseRouting();
-        ConfigureAuthentication(app);
+        ConfigureAuthentication(app, corsOrigins);
 
         app.MapControllers();
 
@@ -76,7 +76,7 @@ public class Startup
         });
     }
 
-    public void ConfigureAuthentication(WebApplication app)
+    public void ConfigureAuthentication(WebApplication app, string corsOrigins)
     {
         app.Use(async (context, next) =>
     {
@@ -87,7 +87,7 @@ public class Startup
             await context.Response.WriteAsync("Token Validation Has Failed. Request Access Denied");
         }
     });
-
+        app.UseCors(corsOrigins);
         app.UseAuthentication();
         app.UseAuthorization();
     }
