@@ -49,6 +49,9 @@ namespace OnlineStore.Infra.Repositories
                     customer.CPF,
                     customer.Email,
                     customer.Password = encryptedPassword,
+                    customer.Cellphone,
+                    customer.Sex,
+                    customer.BirthDate,
                     DateTime.Now,
                     DateTime.Now
                 );

@@ -21,5 +21,14 @@ namespace OnlineStore.Domain.DTO
 
         [MinLength(8, ErrorMessage = "Password must be with 8 characters or longer")]
         public string Password { get; set; }
+
+        [StringLength(12, ErrorMessage = "CPF must have 12 characters")]
+        public string Cellphone { get; set; }
+
+        [MaxLength(1, ErrorMessage = "Sex must have only 1 character")]
+        public string Sex { get; set; }
+
+        [DisplayFormat(DataFormatString = "dd/mm/yyyy")]
+        public DateTime BirthDate { get; set; }
     }
 }
