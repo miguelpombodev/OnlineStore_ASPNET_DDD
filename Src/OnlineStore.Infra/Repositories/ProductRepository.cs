@@ -18,7 +18,7 @@ namespace OnlineStore.Infra.Repositories
         {
             try
             {
-                var product = await _context.Set<Product>().Include(p => p.Brand).Include(p => p.Type).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
+                var product = await _context.Set<Product>().Include(p => p.Brand).Include(p => p.Type).Include(p => p.Colors).AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
                 return product;
             }
@@ -38,11 +38,11 @@ namespace OnlineStore.Infra.Repositories
         {
             try
             {
-                var productListQuery = _context.Set<Product>().Include(p => p.Brand).Include(p => p.Type).AsNoTracking()
+                var productListQuery = _context.Set<Product>().Include(p => p.Brand).Include(p => p.Type).Include(p => p.Colors).AsNoTracking()
                 .Where(
-                    x => (string.IsNullOrEmpty(brand_id.ToString())) || x.BrandId == brand_id
+                    x => string.IsNullOrEmpty(brand_id.ToString()) || x.BrandId == brand_id
                 ).Where(
-                    x => (string.IsNullOrEmpty(type_id.ToString())) || x.TypeId == type_id
+                    x => string.IsNullOrEmpty(type_id.ToString()) || x.TypeId == type_id
                 ).Where(
                     x => (string.IsNullOrEmpty(priceStarts.ToString()) | string.IsNullOrEmpty(priceEnds.ToString())) ||
                     (x.Value >= priceStarts && x.Value <= priceEnds)

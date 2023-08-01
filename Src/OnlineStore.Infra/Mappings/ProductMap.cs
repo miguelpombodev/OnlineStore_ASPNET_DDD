@@ -25,6 +25,7 @@ namespace OnlineStore.Infra.Mappings
 
             builder.HasOne(x => x.Brand).WithMany(x => x.Products).HasConstraintName("FK_PROD_BRANDID").HasForeignKey(f => f.BrandId);
             builder.HasOne(x => x.Type).WithMany(x => x.Products).HasConstraintName("FK_PROD_PRODTYPE").HasForeignKey(f => f.TypeId);
+            builder.HasMany(x => x.Colors).WithOne(x => x.Product).HasConstraintName("FK_PRODCOLOR_PROD").HasForeignKey(f => f.ProductId);
 
         }
     }

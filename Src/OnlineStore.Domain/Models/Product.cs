@@ -24,5 +24,6 @@ namespace OnlineStore.Domain.Models
         public DateTime UpdatedAt { get; private set; }
         public virtual ProductBrand Brand { get; set; }
         public virtual ProductType Type { get; set; }
+        public IList<ProductColors> Colors { get; set; }
     }
 }

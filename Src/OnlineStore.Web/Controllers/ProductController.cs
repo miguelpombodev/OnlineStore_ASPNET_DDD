@@ -7,7 +7,6 @@ namespace OnlineStore.Application.Controllers
 {
     [Route("v1/products")]
     [ApiController]
-    [Authorize]
     public class ProductController : ControllerBase
     {
         private IProductService _service;
