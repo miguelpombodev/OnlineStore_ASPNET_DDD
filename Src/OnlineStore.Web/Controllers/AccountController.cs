@@ -26,7 +26,6 @@ namespace OnlineStore.Application.Controllers
 
             return Ok(new
             {
-                customer,
                 token = generatedToken
             });
         }
