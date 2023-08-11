@@ -32,6 +32,8 @@ public class Startup
             app.UseSwaggerUI();
         }
 
+        // app.UseSerilogRequestLogging();
+
         app.UseHttpsRedirection();
 
         app.UseRouting();
@@ -40,14 +42,6 @@ public class Startup
         app.MapControllers();
 
         app.Run();
-    }
-
-    public void ConfigureSerilog(ConfigureHostBuilder host)
-    {
-        host.UseSerilog((ctx, lc) =>
-                {
-                    lc.WriteTo.Console(LogEventLevel.Debug);
-                });
     }
 
     public void ConfigureServices(IServiceCollection services)

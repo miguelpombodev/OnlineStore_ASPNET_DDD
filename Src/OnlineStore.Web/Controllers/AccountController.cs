@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnlineStore.Domain.DTO.Customers;
 using OnlineStore.Domain.Interfaces.Services;
 using OnlineStore.Services.Services;
@@ -9,7 +10,7 @@ namespace OnlineStore.Application.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private IAccountService _service;
+        private readonly IAccountService _service;
 
         public AccountController(IAccountService service)
         {
@@ -21,13 +22,21 @@ namespace OnlineStore.Application.Controllers
             [FromBody] CustomerLoginDTO customer,
             [FromServices] TokenService _tokenService)
         {
-            var registeredCustomer = await _service.Login(customer);
-            var generatedToken = _tokenService.GenerateToken(registeredCustomer);
-
-            return Ok(new
+            try
             {
-                token = generatedToken
-            });
+                var registeredCustomer = await _service.Login(customer);
+                var generatedToken = _tokenService.GenerateToken(registeredCustomer);
+
+                return Ok(new
+                {
+                    token = generatedToken
+                });
+
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
         }
     }
 }

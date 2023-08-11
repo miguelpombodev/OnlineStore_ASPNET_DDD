@@ -1,11 +1,13 @@
 using System.Text.Json.Serialization;
-
+using Serilog;
 var builder = WebApplication.CreateBuilder(args);
 
 var startup = new Startup(builder.Configuration);
 var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 
-startup.ConfigureSerilog(builder.Host);
+Log.Logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
+builder.Host.UseSerilog();
 
 startup.ConfigureJWTToken(builder.Services);
 
@@ -25,7 +27,7 @@ startup.ConfigureServices(builder.Services);
 
 var app = builder.Build();
 
-// startup.ConfigureAuthentication(app);
+app.UseSerilogRequestLogging();
 
 var workingPath = Environment.CurrentDirectory;
 var projectDirectory = Directory.GetParent(workingPath).Parent.FullName;
