@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OnlineStore.Domain.DTO.Account;
 using OnlineStore.Domain.DTO.Customers;
 using OnlineStore.Domain.Interfaces.Services;
 using OnlineStore.Services.Services;
@@ -36,6 +37,36 @@ namespace OnlineStore.Application.Controllers
             catch (DbUpdateException)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+            catch (NullReferenceException nullEx)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, nullEx.Message);
+            }
+        }
+
+        [HttpPut("forgot-password")]
+        public async Task<IActionResult> ForgotPassword(
+            [FromBody] ForgotPasswordDTO customer
+        )
+        {
+            try
+            {
+
+                var newCustomerPassword = await _service.GenerateNewPassword(customer);
+
+                return StatusCode(StatusCodes.Status200OK, new
+                {
+                    newCustomerPassword
+                });
+
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+            }
+            catch (NullReferenceException nullEx)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, nullEx.Message);
             }
         }
     }

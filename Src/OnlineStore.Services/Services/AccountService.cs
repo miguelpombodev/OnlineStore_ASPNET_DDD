@@ -1,3 +1,4 @@
+using OnlineStore.Domain.DTO.Account;
 using OnlineStore.Domain.DTO.Customers;
 using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Domain.Interfaces.Services;
@@ -15,25 +16,39 @@ namespace OnlineStore.Services.Services
 
         public async Task<Customer> Login(CustomerLoginDTO customer)
         {
-            try
+            var registeredCustomer = await _repository.GetByEmailAsync(customer.Email);
+
+            if (registeredCustomer == null)
             {
-                var registeredCustomer = await _repository.GetByEmail(customer.Email);
-
-                var validatedUserPassword = BCrypt.Net.BCrypt.Verify(customer.Password, registeredCustomer.Password);
-
-                if (validatedUserPassword == false)
-                {
-                    throw new Exception("Password incorrect");
-                }
-
-                return registeredCustomer;
-
+                throw new NullReferenceException("Customer does not found!");
             }
-            catch (System.Exception)
+
+            var validatedUserPassword = BCrypt.Net.BCrypt.Verify(customer.Password, registeredCustomer.Password);
+
+            if (validatedUserPassword == false)
             {
-
-                throw;
+                throw new Exception("Password incorrect");
             }
+
+            return registeredCustomer;
+        }
+
+        public async Task<Customer> GenerateNewPassword(ForgotPasswordDTO customer)
+        {
+            var validateCustomerEmail = await _repository.GetByEmailAsync(customer.Email);
+
+            if (validateCustomerEmail == null)
+            {
+                throw new NullReferenceException("Customer does not found!");
+            }
+
+            var newPassword = BCrypt.Net.BCrypt.HashPassword(customer.NewPassword);
+
+            validateCustomerEmail.Password = newPassword;
+
+            var updatedUser = await _repository.UpdateAsync(validateCustomerEmail);
+
+            return updatedUser;
         }
     }
 }

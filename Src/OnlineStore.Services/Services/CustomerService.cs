@@ -15,7 +15,7 @@ namespace OnlineStore.Services.Services
 
         async public Task<Customer> GetById(Guid id)
         {
-            var customer = await _repository.GetById(id);
+            var customer = await _repository.GetByIdAsync(id);
 
             return customer;
         }
@@ -23,7 +23,7 @@ namespace OnlineStore.Services.Services
 
         async public Task<Customer> GetByEmail(string email)
         {
-            var customer = await _repository.GetByEmail(email);
+            var customer = await _repository.GetByEmailAsync(email);
 
             if (customer == null)
             {
@@ -35,14 +35,14 @@ namespace OnlineStore.Services.Services
 
         async public Task<Customer> SaveCustomer(CreateCustomerDTO customer)
         {
-            var getUserByEmail = await _repository.GetByEmail(customer.Email);
+            var getUserByEmail = await _repository.GetByEmailAsync(customer.Email);
 
             if (getUserByEmail != null)
             {
                 throw new Exception("User already registered!");
             }
 
-            var createdCustomer = await _repository.Save(customer);
+            var createdCustomer = await _repository.SaveAsync(customer);
 
             return createdCustomer;
         }

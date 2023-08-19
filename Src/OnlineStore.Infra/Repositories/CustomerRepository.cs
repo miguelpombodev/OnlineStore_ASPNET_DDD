@@ -15,14 +15,14 @@ namespace OnlineStore.Infra.Repositories
         }
 
 
-        async public Task<Customer> GetById(Guid id)
+        async public Task<Customer> GetByIdAsync(Guid id)
         {
             var user = await _context.Set<Customer>().AsNoTracking().FirstOrDefaultAsync(x => x.Id == id);
 
             return user;
         }
 
-        async public Task<Customer> GetByEmail(string email)
+        async public Task<Customer> GetByEmailAsync(string email)
         {
             try
             {
@@ -37,7 +37,7 @@ namespace OnlineStore.Infra.Repositories
             }
         }
 
-        async public Task<Customer> Save(CreateCustomerDTO customer)
+        async public Task<Customer> SaveAsync(CreateCustomerDTO customer)
         {
             try
             {
@@ -66,5 +66,22 @@ namespace OnlineStore.Infra.Repositories
                 throw new DbUpdateException(e.ToString());
             }
         }
+
+        public async Task<Customer> UpdateAsync(Customer customer)
+        {
+            try
+            {
+                _context.Update(customer);
+                await _context.SaveChangesAsync();
+
+                return customer;
+
+            }
+            catch (DbUpdateException e)
+            {
+                throw new DbUpdateException(e.ToString());
+            }
+        }
+
     }
 }
