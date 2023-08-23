@@ -55,6 +55,7 @@ public class Startup
         services.AddScoped<IAccountService, AccountService>();
 
         services.AddTransient<TokenService>();
+        services.AddTransient<HttpClientService>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();

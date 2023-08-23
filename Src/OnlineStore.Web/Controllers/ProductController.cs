@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using OnlineStore.Domain.Interfaces.Services;
 using OnlineStore.Services.Errors;
+using OnlineStore.Services.Services;
 
 namespace OnlineStore.Application.Controllers
 {
@@ -17,12 +18,20 @@ namespace OnlineStore.Application.Controllers
         }
 
         [HttpGet("{id:Guid}")]
-        public async Task<IActionResult> GetById(Guid id)
+        public async Task<IActionResult> GetById(
+            Guid id,
+            [FromServices] HttpClientService _httpClientService
+        )
         {
             try
             {
                 var product = await _service.GetById(id);
-                return StatusCode(200, product);
+                var techInfos = await _httpClientService.GetAsync($"http://localhost:1337/api/technical-specification-infos?populate=*&filters[slug]={product.Sku}");
+                return StatusCode(200, new
+                {
+                    product,
+                    techInfos
+                });
             }
             catch (ServiceError e)
             {
