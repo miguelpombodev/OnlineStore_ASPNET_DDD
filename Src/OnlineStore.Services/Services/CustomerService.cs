@@ -27,7 +27,7 @@ namespace OnlineStore.Services.Services
 
             if (customer == null)
             {
-                throw new Exception("User is not registered!");
+                throw new NullReferenceException("User is not registered!");
             }
 
             return customer;

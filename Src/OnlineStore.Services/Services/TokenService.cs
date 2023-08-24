@@ -16,7 +16,7 @@ namespace OnlineStore.Services.Services
         public string GenerateToken(Customer customer)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(SecurityConfiguration.JWTKey);
+            var key = Encoding.ASCII.GetBytes(AppConfiguration.JWTKey);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(

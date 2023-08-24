@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using OnlineStore.Domain.Models;
+using OnlineStore.Infra.Configuration;
 using OnlineStore.Infra.Mappings;
 
 namespace OnlineStore.Infra.Context
@@ -10,7 +11,7 @@ namespace OnlineStore.Infra.Context
         public DbSet<Customer> Customers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
         => options.UseSqlServer(
-            $"Server={Environment.GetEnvironmentVariable("DB_SERVER")},1433;Database={Environment.GetEnvironmentVariable("DB_SCHEMA")};User ID={Environment.GetEnvironmentVariable("DB_USER")};Password={Environment.GetEnvironmentVariable("DB_PASSWORD")};TrustServerCertificate={Environment.GetEnvironmentVariable("TRUST_SERVER_CERTIFICATE")}");
+            AppConfiguration.MainDatabaseConnectionString);
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
