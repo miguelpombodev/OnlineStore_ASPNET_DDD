@@ -29,8 +29,6 @@ var app = builder.Build();
 
 app.UseSerilogRequestLogging();
 
-var workingPath = Environment.CurrentDirectory;
-var projectDirectory = Directory.GetParent(workingPath).Parent.FullName;
-startup.ConfigureDotEnv(Path.Combine(projectDirectory, ".env"));
+startup.ConfigureByEnvironment(app);
 startup.Configure(app, builder.Environment, MyAllowSpecificOrigins);
 

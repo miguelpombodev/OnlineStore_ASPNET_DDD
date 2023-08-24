@@ -1,3 +1,5 @@
+using System.Net.Mail;
+using System.Text.Json;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using OnlineStore.Domain.DTO.Account;
@@ -12,10 +14,12 @@ namespace OnlineStore.Application.Controllers
     public class AccountController : ControllerBase
     {
         private readonly IAccountService _service;
+        private readonly ICustomerService _customerService;
 
-        public AccountController(IAccountService service)
+        public AccountController(IAccountService service, ICustomerService customerService)
         {
             _service = service;
+            _customerService = customerService;
         }
 
         [HttpPost("login")]
@@ -44,8 +48,8 @@ namespace OnlineStore.Application.Controllers
             }
         }
 
-        [HttpPut("forgot-password")]
-        public async Task<IActionResult> ForgotPassword(
+        [HttpPut("reset-password")]
+        public async Task<IActionResult> ResetPassword(
             [FromBody] ForgotPasswordDTO customer
         )
         {
@@ -67,6 +71,50 @@ namespace OnlineStore.Application.Controllers
             catch (NullReferenceException nullEx)
             {
                 return StatusCode(StatusCodes.Status404NotFound, nullEx.Message);
+            }
+        }
+
+        [HttpGet("forgot-password")]
+        public async Task<IActionResult> ForgotPassword([FromBody] JsonElement jsonElement, [FromServices] EmailService _emailService)
+        {
+            try
+            {
+                var customerEmailValidated = await _customerService.GetByEmail(jsonElement.GetProperty("email").ToString());
+
+                _emailService.SendEmail(
+                    "from@example.com",
+                    "to@example.com",
+                    "Your email exists!",
+                    "Here's a email body message to tell you that your email exists XD"
+                );
+
+                return Ok(new
+                {
+                    message = "Email sent!"
+                });
+
+            }
+            catch (NullReferenceException ex)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, new
+                {
+                    error = ex.Message
+                });
+            }
+            catch (ArgumentNullException ex)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+
+            }
+            catch (SmtpException ex)
+            {
+
+                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+            }
+
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
             }
         }
     }

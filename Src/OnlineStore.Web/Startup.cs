@@ -6,10 +6,8 @@ using OnlineStore.Infra.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Net;
-using Serilog;
 using OnlineStore.Infra.Configuration;
 using System.Text;
-using Serilog.Events;
 using Microsoft.OpenApi.Models;
 public class Startup
 {
@@ -32,8 +30,6 @@ public class Startup
             app.UseSwaggerUI();
         }
 
-        // app.UseSerilogRequestLogging();
-
         app.UseHttpsRedirection();
 
         app.UseRouting();
@@ -42,6 +38,16 @@ public class Startup
         app.MapControllers();
 
         app.Run();
+    }
+
+
+    public void ConfigureByEnvironment(WebApplication app)
+    {
+        var smtp = new AppConfiguration.SMTPConfiguration();
+        app.Configuration.GetSection("SMTPConfiguration").Bind(smtp);
+        AppConfiguration.SMTP = smtp;
+
+        AppConfiguration.MainDatabaseConnectionString = app.Configuration.GetConnectionString("MainDatabase");
     }
 
     public void ConfigureServices(IServiceCollection services)
@@ -56,6 +62,8 @@ public class Startup
 
         services.AddTransient<TokenService>();
         services.AddTransient<HttpClientService>();
+
+        services.AddSingleton<EmailService>();
 
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
         services.AddEndpointsApiExplorer();
@@ -89,7 +97,7 @@ public class Startup
 
     public void ConfigureJWTToken(IServiceCollection services)
     {
-        var key = Encoding.ASCII.GetBytes(SecurityConfiguration.JWTKey);
+        var key = Encoding.ASCII.GetBytes(AppConfiguration.JWTKey);
         services.AddAuthentication(config =>
         {
             config.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -106,23 +114,4 @@ public class Startup
         });
     }
 
-    public void ConfigureDotEnv(string filePath)
-    {
-        if (!File.Exists(filePath))
-        {
-            return;
-        }
-
-        foreach (var line in File.ReadAllLines(filePath))
-        {
-            var parts = line.Split(
-                '=',
-                StringSplitOptions.RemoveEmptyEntries);
-
-            if (parts.Length != 2)
-                continue;
-
-            Environment.SetEnvironmentVariable(parts[0], parts[1]);
-        }
-    }
 }

@@ -10,7 +10,7 @@ namespace OnlineStore.Application.Controllers
     [ApiController]
     public class CustomerController : ControllerBase
     {
-        private ICustomerService _service;
+        private readonly ICustomerService _service;
 
         public CustomerController(ICustomerService service)
         {
