@@ -32,7 +32,7 @@ namespace OnlineStore.Application.Controllers
                 var registeredCustomer = await _service.Login(customer);
                 var generatedToken = _tokenService.GenerateToken(registeredCustomer);
 
-                return Ok(new
+                return StatusCode(StatusCodes.Status200OK, new
                 {
                     token = generatedToken
                 });

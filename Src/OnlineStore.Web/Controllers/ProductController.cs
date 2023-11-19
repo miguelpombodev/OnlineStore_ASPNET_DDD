@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OnlineStore.Domain.Interfaces.Services;
 using OnlineStore.Services.Errors;
 using OnlineStore.Services.Services;
@@ -35,7 +36,15 @@ namespace OnlineStore.Application.Controllers
             }
             catch (ServiceError e)
             {
-                return StatusCode(e.StatusCode, e.Message);
+                return StatusCode(e.StatusCode, new { message = e.Message });
+            }
+            catch (DbUpdateException)
+            {
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "Internal Server Error");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{e}");
             }
         }
 
@@ -52,9 +61,13 @@ namespace OnlineStore.Application.Controllers
             {
                 return Ok(await _service.GetAllProducts(type_id, brand_id, priceStarts, priceEnds, orderBy));
             }
-            catch (ServiceError e)
+            catch (DbUpdateException)
             {
-                return StatusCode(e.StatusCode, e.Message);
+                return StatusCode(StatusCodes.Status503ServiceUnavailable, "Internal Server Error");
+            }
+            catch (Exception e)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, $"{e}");
             }
         }
 

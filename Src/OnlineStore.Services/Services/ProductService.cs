@@ -17,25 +17,14 @@ namespace OnlineStore.Services.Services
 
         public async Task<Product> GetById(Guid id)
         {
-            try
-            {
-                var product = await _repository.GetById(id);
+            var product = await _repository.GetById(id);
 
-                if (product == null)
-                {
-                    throw new ServiceError("Product not found", 404);
-                }
+            if (product == null)
+            {
+                throw new ServiceError("Product not found", 404);
+            }
 
-                return product;
-            }
-            catch (ServiceError e)
-            {
-                throw e;
-            }
-            catch (DbUpdateException e)
-            {
-                throw new ServiceError("Internal Server Error", 500, e.ToString());
-            }
+            return product;
         }
 
         public async Task<List<Product>> GetAllProducts(
