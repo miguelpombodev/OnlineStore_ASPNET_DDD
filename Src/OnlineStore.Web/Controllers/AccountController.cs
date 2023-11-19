@@ -83,7 +83,7 @@ namespace OnlineStore.Application.Controllers
 
                 _emailService.SendEmail(
                     "from@example.com",
-                    "to@example.com",
+                    customerEmailValidated.Email,
                     "Your email exists!",
                     "Here's a email body message to tell you that your email exists XD"
                 );
@@ -103,18 +103,27 @@ namespace OnlineStore.Application.Controllers
             }
             catch (ArgumentNullException ex)
             {
-                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+                return StatusCode(StatusCodes.Status400BadRequest, new
+                {
+                    error = ex.Message
+                });
 
             }
             catch (SmtpException ex)
             {
 
-                return StatusCode(StatusCodes.Status400BadRequest, ex.Message);
+                return StatusCode(StatusCodes.Status400BadRequest, new
+                {
+                    error = ex.Message
+                });
             }
 
             catch (Exception)
             {
-                return StatusCode(StatusCodes.Status500InternalServerError, "Internal Server Error");
+                return StatusCode(StatusCodes.Status500InternalServerError, new
+                {
+                    error = "Internal Server Error"
+                });
             }
         }
     }
