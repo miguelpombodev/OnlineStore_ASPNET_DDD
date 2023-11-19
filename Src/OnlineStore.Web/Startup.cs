@@ -47,6 +47,11 @@ public class Startup
         app.Configuration.GetSection("SMTPConfiguration").Bind(smtp);
         AppConfiguration.SMTP = smtp;
 
+        if (app.Environment.IsDevelopment())
+        {
+            AppConfiguration.IsDevelopment = true;
+        }
+
         AppConfiguration.MainDatabaseConnectionString = app.Configuration.GetConnectionString("MainDatabase");
     }
 

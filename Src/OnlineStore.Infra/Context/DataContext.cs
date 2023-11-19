@@ -10,8 +10,10 @@ namespace OnlineStore.Infra.Context
         public DbSet<Product> Products { get; set; }
         public DbSet<Customer> Customers { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder options)
-        => options.UseSqlServer(
-            AppConfiguration.MainDatabaseConnectionString);
+        {
+            options.UseSqlServer(AppConfiguration.MainDatabaseConnectionString);
+            options.LogTo(Console.WriteLine);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
