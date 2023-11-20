@@ -1,0 +1,25 @@
+version: "3.8"
+
+networks:
+  containers_net:
+    driver: bridge
+
+services:
+  api:
+    build: .
+    ports:
+      - 5000:5000
+    networks:
+      - containers_net
+    environment:
+      - ASPNETCORE_ENVIRONMENT="Development"
+    depends_on: [db]
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    ports:
+      - 1433:1433
+    networks:
+      - containers_net
+    environment:
+      - MSSQL_SA_PASSWORD=123456QWERT@#
+      - ACCEPT_EULA=Y
