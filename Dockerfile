@@ -7,7 +7,9 @@ RUN dotnet publish "./Src/OnlineStore.Web/OnlineStore.Web.csproj" -c release -o 
 
 # Serve Stage
 FROM mcr.microsoft.com/dotnet/aspnet:7.0-alpine AS base
+RUN apk add --no-cache icu-libs
 ENV ASPNETCORE_URLS=http://+:5000
+ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 WORKDIR /app
 COPY --from=build /app ./
 
