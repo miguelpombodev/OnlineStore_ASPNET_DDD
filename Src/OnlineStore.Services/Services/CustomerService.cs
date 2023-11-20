@@ -2,6 +2,7 @@ using OnlineStore.Domain.DTO;
 using OnlineStore.Domain.Interfaces.Repositories;
 using OnlineStore.Domain.Interfaces.Services;
 using OnlineStore.Domain.Models;
+using OnlineStore.Services.Errors;
 
 namespace OnlineStore.Services.Services
 {
@@ -25,9 +26,9 @@ namespace OnlineStore.Services.Services
         {
             var customer = await _repository.GetByEmailAsync(email);
 
-            if (customer == null)
+            if (customer is null)
             {
-                throw new NullReferenceException("User is not registered!");
+                throw new ServiceError("User is not registered!", 404);
             }
 
             return customer;

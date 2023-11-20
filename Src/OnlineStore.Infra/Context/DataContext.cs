@@ -22,6 +22,7 @@ namespace OnlineStore.Infra.Context
             modelBuilder.ApplyConfiguration(new ProductBrandMap());
             modelBuilder.ApplyConfiguration(new ProductTypeMap());
             modelBuilder.ApplyConfiguration(new ProductColorMap());
+            modelBuilder.ApplyConfiguration(new CartMap());
         }
     }
 }
