@@ -26,7 +26,7 @@ namespace OnlineStore.Infra.Repositories
             return newCart;
         }
 
-        public async Task<Cart>? GetCartAsync(Guid userId)
+        public async Task<Cart?> GetCartAsync(Guid userId)
         {
             var cart = await _context.Set<Cart>().AsNoTracking().Where(x => x.CustomerId == userId).FirstOrDefaultAsync();
 

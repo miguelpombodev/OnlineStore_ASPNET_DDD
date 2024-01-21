@@ -27,7 +27,7 @@ namespace OnlineStore.Services.Services
             throw new NotImplementedException();
         }
 
-        public async Task<Cart>? GetCartOrCreateAsync(Guid userId)
+        public async Task<Cart> GetCartOrCreateAsync(Guid userId)
         {
             var cart = await _repository.GetCartAsync(userId);
 

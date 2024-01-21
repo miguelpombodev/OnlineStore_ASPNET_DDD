@@ -4,7 +4,7 @@ namespace OnlineStore.Domain.Interfaces.Services
 {
     public interface ICartService
     {
-        Task<Cart>? GetCartOrCreateAsync(Guid userId);
+        Task<Cart> GetCartOrCreateAsync(Guid userId);
 
         Task<string> CreateCartAsync(Guid userId);
 
